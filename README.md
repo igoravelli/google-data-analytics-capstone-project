@@ -1,10 +1,23 @@
+<!---
+
+TEMPLATE:
+
+# Prepare
+### Guiding questions:
+
+### Key tasks:
+
+### Deliverable:
+- :negative_squared_cross_mark:: 
+-->
+
 # Google Data Analytics Capstone: Case Study
 In this repository is all about the final project on Google Data Analytics Certificate. 
 
 This Case Study is divided into 5 steps:
 
 1. ASK
-2. PREPARA
+2. PREPARE
 3. PROCESS
 4. ANALYZE
 5. SHARE
@@ -28,8 +41,92 @@ jngjnfgbjnjk gf
 - Determine key stakeholders
 - Choose a dataset
 ### Deliverable:
-- :heavy_check_mark: A clear statement of the business task you have selected to investigate
-- [] test checkbox
+<!-- 
+
+when the deliverable was finished, change the icon to :ballot_box_with_check:
+
+-->
+- :negative_squared_cross_mark:: A clear statement of the business task you have selected to investigate
 
 
+# Prepare
+### Guiding questions:
+- Where is your data located?
+- How is the data organized?
+- Are there issues with bias or credibility in this data? Does your data ROCCC?
+- How are you addressing licensing, privacy, security, and accessibility?
+- How did you verify the data’s integrity?
+- How does it help you answer your question?
+- Are there any problems with the data?
+### Key tasks:
+- Download data and store it appropriately
+- Identify how it’s organized
+- Sort and filter the data
+- Determine the credibility of the data
+### Deliverable:
+- :negative_squared_cross_mark:: A description of all data sources used
 
+
+# Process
+### Guiding questions:
+- What tools are you choosing and why?
+- Have you ensured your data’s integrity?
+- What steps have you taken to ensure that your data is clean?
+- How can you verify that your data is clean and ready to analyze?
+- Have you documented your cleaning process so you can review and share those results?
+### Key tasks:
+- Check the data for errors
+- Choose your tools
+- Transform the data so you can work with it eectively
+- Document the cleaning process.
+### Deliverable:
+- :negative_squared_cross_mark:: Documentation of any cleaning or manipulation of data
+
+
+# Analyze
+### Guiding questions:
+- How should you organize your data to perform analysis on it?
+- Has your data been properly formatted?
+- What surprises did you discover in the data?
+- What trends or relationships did you find in the data?
+- How will these insights help answer your business questions?
+### Key tasks:
+- Aggregate your data so it’s useful and accessible.
+- Organize and format your data.
+- Perform calculations.
+- Document your calculations to keep track of your analysis steps.
+- Identify trends and relationships.
+### Deliverable:
+- :negative_squared_cross_mark:: A summary of your analysis
+
+
+# Share
+### Guiding questions:
+- Were you able to answer the business question?
+- What story does your data tell?
+- How do your findings relate to your original question?
+- Who is your audience? What is the best way to communicate with them?
+- Can data visualization help you share your findings?
+- Is your presentation accessible to your audience?
+### Key tasks:
+- Determine the best way to share your findings.
+- Create eective data visualizations.
+- Present your findings.
+- Ensure your work is accessible
+### Deliverable:
+- :negative_squared_cross_mark:: Supporting visualizations and key findings
+
+
+# Act
+### Guiding questions:
+- What is your final conclusion based on your analysis?
+- How could your team and business apply your insights?
+- What next steps would you or your stakeholders take based on your findings?
+- Is there additional data you could use to expand on your findings?
+### Key tasks:
+- Create your portfolio
+- Add your case study
+- Practice presenting your case study to a friend or family member
+### Deliverable:
+- :negative_squared_cross_mark:: Your top high-level insights based on your analysis
+- :negative_squared_cross_mark:: Based on what you discover, a list of additional deliverables you think would be helpful to include for further exploration
