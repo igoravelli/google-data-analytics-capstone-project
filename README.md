@@ -16,12 +16,12 @@ In this repository is all about the final project on Google Data Analytics Certi
 
 This Case Study is divided into 5 steps:
 
-1. ASK
-2. PREPARE
-3. PROCESS
-4. ANALYZE
-5. SHARE
-6. ACT
+1. [ASK](https://github.com/igoravelli/google-data-analytics-capstone-project#ask)
+2. [PREPARE](https://github.com/igoravelli/google-data-analytics-capstone-project#prepare)
+3. [PROCESS](https://github.com/igoravelli/google-data-analytics-capstone-project#process)
+4. [ANALYZE](https://github.com/igoravelli/google-data-analytics-capstone-project#analyze)
+5. [SHARE](https://github.com/igoravelli/google-data-analytics-capstone-project#share)
+6. [ACT](https://github.com/igoravelli/google-data-analytics-capstone-project#act)
 
 ## The scenario
 jngjnfgbjnjk gf
