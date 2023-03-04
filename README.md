@@ -24,7 +24,10 @@ This Case Study is divided into 5 steps:
 6. [ACT](https://github.com/igoravelli/google-data-analytics-capstone-project#act)
 
 ## The scenario
-jngjnfgbjnjk gf
+I work for a tourism company and was designated to find the best Airbnb hosting in Europe for one of our clients. To do that I have a sort of data about some Airbnb hosts in Europe to explore and complete this task.
+
+Between their requirements are privacy, price, and location.
+They are 4 people and anyone doesn't drive. So, the distance to a means of public transport is an important point.
 
 
 # Ask
