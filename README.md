@@ -50,7 +50,7 @@ when the deliverable was finished, change the icon to :ballot_box_with_check:
 
 -->
 - :negative_squared_cross_mark:: A clear statement of the business task you have selected to investigate
-
+Find the best Airbnb for the client according to their requirements.
 
 # Prepare
 ### Guiding questions:
@@ -68,7 +68,7 @@ when the deliverable was finished, change the icon to :ballot_box_with_check:
 - Determine the credibility of the data
 ### Deliverable:
 - :negative_squared_cross_mark:: A description of all data sources used
-
+The spreedsheet available on this link on Kaggle.com
 
 # Process
 ### Guiding questions:
