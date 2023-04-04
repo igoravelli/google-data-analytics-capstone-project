@@ -1,10 +1,44 @@
-# Title
+# Process to clean all dataframes
 
-This is a Rmd document
+### Dataframe schema
 
+| Column | Description | DType |
+| :--- | :--- | :--- |
+| `realSum` | the total price of the listing | integer |
+| `room_type` | private/shared/entire home/apt | string |
+| `room_shared` | indicate if the room is shared | bool |
+| `room_private` | indicate if the room is private | bool |
+| `person_capacity` | number of people capacity in the room | integer |
+| `host_is_superhost` | boolean value indicating if host is a superhost or not | bool |
+| `multi` | indicator whether listing is for multiple rooms or not | integer |
+| `biz` | business indicator | integer |
+| `cleanliness_rating` | rating of the clean level of the room | integer |
+| `guest_satisfaction_overall` | overall rating from guests camparing all listings offered by host | integer |
+| `bedrooms` | quantity of bedrooms available in the listing | integer |
+| `dist` | distance from city center | float |
+| `metro_dist` | distance from closest subway station | float |
+| `lng & lat` | coordinates for location identification | float |
 
+# Install & load packages
 ```{r}
-x <- 3
-print(x)
+install.packages("dplyr")
+library(dplyr)
 ```
 
+```{r}
+vienna <- read.csv("/home/igorregly/google-data-analytics-capstone-project/csv_files/vienna_weekends.csv")
+```
+
+---
+# Cleaning Process
+### Checking null data
+
+```{r}
+# View(vienna %>% filter(is.na(vienna$metro_dist)))
+
+View(is.na(vienna))
+
+# View(vienna[1633,])
+```
+
+### Checking duplicates
