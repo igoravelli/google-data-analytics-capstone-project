@@ -20,25 +20,55 @@
 | `lng & lat` | coordinates for location identification | float |
 
 # Install & load packages
-```{r}
+```{r install & load packages}
 install.packages("dplyr")
 library(dplyr)
 ```
 
-```{r}
-vienna <- read.csv("/home/igorregly/google-data-analytics-capstone-project/csv_files/vienna_weekends.csv")
+
+# Load files
+
+```{r load all raw files}
+setwd("/home/igorregly/google-data-analytics-capstone-project/csv_files/")
+dfs <- list()
+listcsv <- dir(pattern = "*.csv")
+
+for (k in 1:length(listcsv)) {
+    dfs[[k]] <- read.csv(listcsv[k])
+}
 ```
 
 ---
-# Cleaning Process
-### Checking null data
+# Cleaning Functions
+## Droping null rows
 
-```{r}
-# View(vienna %>% filter(is.na(vienna$metro_dist)))
+```{r drop null values of a DataFrame}
 
-View(is.na(vienna))
+drop_na_values <- function(df) {
+    df <- na.omit(df)
 
-# View(vienna[1633,])
+    return(df)
+}
 ```
 
-### Checking duplicates
+## Checking duplicates
+
+```{r remove duplicated rows}
+remove_duplicated_rows <- function(df) {
+    df <- df %>% distinct()
+
+    return(df)
+}
+```
+
+# Applying functions
+```{r}
+cleaned_dfs <- list()
+
+for (df in dfs) {
+    df <- drop_na_values(df)
+    df <- remove_duplicated_rows(df)
+
+    append(cleaned_dfs, df)
+}
+```
