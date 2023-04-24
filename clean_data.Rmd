@@ -37,7 +37,7 @@ setwd("/home/igorregly/google-data-analytics-capstone-project/csv_files/")
 dfs <- list()
 listcsv <- dir(pattern = "*.csv")
 
-for (k in 1:length(listcsv)) {
+for (k in seq_along(listcsv)) {
     city_n_type <- strsplit(listcsv[k], ".csv")[[1]]
     city <- strsplit(city_n_type, "_")[[1]][1]
     type <- strsplit(city_n_type, "_")[[1]][2]
