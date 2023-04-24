@@ -49,7 +49,7 @@ They are 4 people and anyone doesn't drive. So, the distance to a means of publi
 when the deliverable was finished, change the icon to :ballot_box_with_check:
 
 -->
-- :negative_squared_cross_mark:: A clear statement of the business task you have selected to investigate
+- :ballot_box_with_check:: A clear statement of the business task you have selected to investigate
 
 Find the best Airbnb for the client according to their requirements.
 
@@ -68,7 +68,7 @@ Find the best Airbnb for the client according to their requirements.
 - Sort and filter the data
 - Determine the credibility of the data
 ### Deliverable:
-- :negative_squared_cross_mark:: A description of all data sources used
+- :ballot_box_with_check:: A description of all data sources used
 
 The spreedsheet available on this [link](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) on Kaggle.com
 
@@ -85,7 +85,9 @@ The spreedsheet available on this [link](https://www.kaggle.com/datasets/thedeva
 - Transform the data so you can work with it eectively
 - Document the cleaning process.
 ### Deliverable:
-- :negative_squared_cross_mark:: Documentation of any cleaning or manipulation of data
+- :ballot_box_with_check:: Documentation of any cleaning or manipulation of data
+
+In the "clean_data.Rmd" file is all the cleaning & manipulation proccess that had been execute on all csv files.
 
 
 # Analyze
