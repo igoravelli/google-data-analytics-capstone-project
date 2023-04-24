@@ -49,7 +49,7 @@ They are 4 people and anyone doesn't drive. So, the distance to a means of publi
 when the deliverable was finished, change the icon to :heavy_check_mark:
 
 -->
-- :ballot_bheavy_check_markox_with_check:: A clear statement of the business task you have selected to investigate
+- :heavy_check_mark: A clear statement of the business task you have selected to investigate
 
 Find the best Airbnb for the client according to their requirements.
 
@@ -68,7 +68,7 @@ Find the best Airbnb for the client according to their requirements.
 - Sort and filter the data
 - Determine the credibility of the data
 ### Deliverable:
-- :heavy_check_mark:: A description of all data sources used
+- :heavy_check_mark: A description of all data sources used
 
 The spreedsheet available on this [link](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) on Kaggle.com
 
@@ -85,7 +85,7 @@ The spreedsheet available on this [link](https://www.kaggle.com/datasets/thedeva
 - Transform the data so you can work with it eectively
 - Document the cleaning process.
 ### Deliverable:
-- :heavy_check_mark:: Documentation of any cleaning or manipulation of data
+- :heavy_check_mark: Documentation of any cleaning or manipulation of data
 
 In the "clean_data.Rmd" file is all the cleaning & manipulation proccess that had been execute on all csv files.
 
