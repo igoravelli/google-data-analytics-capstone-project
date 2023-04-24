@@ -21,12 +21,16 @@
 
 # Install & load packages
 ```{r install & load packages}
-install.packages("dplyr")
+# install.packages("dplyr")
 library(dplyr)
+library(plyr)
+library(knitr)
 ```
 
 
-# Load files
+# Loading all files
+In the code below we read all CSV files in the folder "csv_files" and create the "city" column that indicates the city of the listing, and the "type" column that
+indicate if the listing is about weekdays or weekends.
 
 ```{r load all raw files}
 setwd("/home/igorregly/google-data-analytics-capstone-project/csv_files/")
@@ -34,41 +38,52 @@ dfs <- list()
 listcsv <- dir(pattern = "*.csv")
 
 for (k in 1:length(listcsv)) {
+    city_n_type <- strsplit(listcsv[k], ".csv")[[1]]
+    city <- strsplit(city_n_type, "_")[[1]][1]
+    type <- strsplit(city_n_type, "_")[[1]][2]
+
     dfs[[k]] <- read.csv(listcsv[k])
+
+    dfs[[k]] <- cbind(dfs[[k]], city, type)
 }
+```
+
+After all CSV files had been read, we merged them all into a unique data frame to make it easier to analyze the data.
+```{r make the unique dataframe}
+unique_df <- ldply(dfs, data.frame)
 ```
 
 ---
-# Cleaning Functions
-## Droping null rows
+# Cleaning the data
+## Filtering out null or empty rows
+In the chunk below we remove all rows with null values or rows that are empty because these rows will mess up our analysis.
 
-```{r drop null values of a DataFrame}
+```{r}
+all_data <-
+    unique_df[
+        Reduce(`&`, lapply(unique_df, function(x) !(is.na(x) | x == ""))),
+    ]
 
-drop_na_values <- function(df) {
-    df <- na.omit(df)
-
-    return(df)
-}
+print(nrow(unique_df))
+print(nrow(all_data))
 ```
 
 ## Checking duplicates
+Now we'll check on the data if there are any duplicated rows and, if so, remove them.
 
-```{r remove duplicated rows}
-remove_duplicated_rows <- function(df) {
-    df <- df %>% distinct()
-
-    return(df)
-}
+```{r}
+all_data <- unique(all_data)
+View(all_data)
 ```
 
-# Applying functions
-```{r}
-cleaned_dfs <- list()
+Below we check the summary of the data
+```{r check summary of the data}
+View(summary(all_data))
+```
 
-for (df in dfs) {
-    df <- drop_na_values(df)
-    df <- remove_duplicated_rows(df)
+## Create aggregated csv file with all data
 
-    append(cleaned_dfs, df)
-}
+Now we'll create the aggregated csv file with all data about all countries and its specs
+```{r generate aggregated csv file}
+write.csv(all_data, "~/google-data-analytics-capstone-project/aggregated_data.csv", row.names=FALSE)
 ```
