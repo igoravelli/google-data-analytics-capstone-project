@@ -1,0 +1,140 @@
+# Here is where the show begins
+
+In this file we'll analyze the 'aggregated_data.csv' file containing data about all
+selected airbnb listings to choose which one is the best choice for our client
+
+```{r load all packages and the csv file}
+library(dplyr)
+library(plyr)
+library(knitr)
+library(tidyr)
+
+setwd("/home/igorregly/google-data-analytics-capstone-project/")
+all_data <- read.csv('./aggregated_data.csv', sep=',')
+
+# View(all_data)
+```
+
+To choose the best listing for our client we'll create a score using the variable available on the data frame to weigh accordingly the preferences of the client.
+After interviewing our client we get these information about their priorities:
+1. privacy
+2. price
+3. location
+
+Besides, they are 4 people and anyone doesn't drive. So, the distance to a means of public transport is an important point.
+4. distance to public transport
+
+First, we have to normalize all variables that will be used to build the score.
+
+To do that we'll use the Min-Max Normalization method to transform all values on a value between 0 and 1
+```{r normalize the variables}
+min_max_normalization <- function(s) {
+    min_v <- min(s)
+    max_v <- max(s)
+
+    serie <- sapply(s, function(x) (x - min_v) / (max_v - min_v))
+
+    return(serie)
+}
+
+# create normalized columns
+norm_df <- transform(all_data,
+                    norm_realSum = min_max_normalization(realSum),
+                    norm_cleanRating = min_max_normalization(cleanliness_rating),
+                    norm_csat = min_max_normalization(guest_satisfaction_overall),
+                    norm_centerDist = min_max_normalization(dist),
+                    norm_metroDist = min_max_normalization(metro_dist))
+
+# covnert the booleans columns to numerics ones
+bool_cols <- c('room_shared', 'room_private', 'host_is_superhost')
+
+norm_df[bool_cols] <- apply(norm_df[bool_cols], 2, function(x) as.numeric(as.logical(x)))
+
+
+# View(norm_df)
+```
+
+After created the norm columns, we'll select the ones that will be used to create the score
+```{r selecting columns to use}
+to_selec_cols <- c("realSum",
+                    "room_type",
+                    "room_shared",
+                    "bedrooms",
+                    "person_capacity",
+                    "lng",
+                    "lat",
+                    "city",
+                    "type",
+                    "norm_realSum",
+                    "norm_cleanRating",
+                    "norm_csat",
+                    "norm_centerDist",
+                    "norm_metroDist")
+
+selec_cols_df <- select(norm_df, to_selec_cols)
+# View(selec_cols_df)
+```
+
+With all set, we can now create the score to help us to choose the better list to our client.
+To do that, we will create a vector with weight values accordingly the clients priorities viewed before, and then multiply the columns with these vectors.
+
+1. privacy
+2. price & location
+3. location
+
+```{r}
+weight_values <- c(0.9, 0.7, 0.5)
+
+weighted_df <- selec_cols_df %>%
+    mutate(
+        weighted_realSum = norm_realSum * weight_values[2],
+        weighted_centerDist = norm_centerDist * weight_values[2],
+        weighted_metroDist = norm_metroDist * weight_values[2],
+        weighted_cleanRating = norm_cleanRating * weight_values[3],
+        weighted_csat = norm_csat * weight_values[3],
+        score = -(weighted_realSum) + weighted_cleanRating + weighted_csat + -(weighted_centerDist) + -(weighted_metroDist)
+    )
+
+# View(weighted_df)
+```
+
+Because the privacy is very important to our client, before to create the charts we'll filter out only the listings that are private rooms and, obviously, because they are 4,
+we'll also filter out only the listings that have 4 bedrooms.
+
+In the same chunk code we'll select the columns that will be used to create our map.
+
+```{r filter the private listings and select columns}
+only_private_rooms <- weighted_df[weighted_df$room_shared == 0 & weighted_df$person_capacity >= 4, ]
+
+cols = c(
+    'realSum',
+    'room_type',
+    'score',
+    'lat',
+    'lng',
+    'city',
+    'type'
+)
+
+to_graphs_df <- select(only_private_rooms, cols)
+
+View(to_graphs_df)
+```
+
+# All this to visualize the data on a map
+To visualize the clients' option we will create a map with the score information about each listing to help them out to choose the better option.
+
+```{r install n load the packages to visualize the data}
+# install.packages("leaflet")
+library(leaflet)
+```
+
+```{r create the map}
+leaflet(to_graphs_df) %>%
+    addTiles() %>%
+    addMarkers(
+        lng = ~lng, lat = ~lat,
+        popup = paste("City: ", to_graphs_df$city, "<br>",
+                    "Score: ", to_graphs_df$score, "<br>")
+    )
+```
