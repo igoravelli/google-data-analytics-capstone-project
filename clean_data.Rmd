@@ -76,6 +76,13 @@ all_data <- unique(all_data)
 View(all_data)
 ```
 
+## Rounding the realSum column
+Before to create the aggregated final csv, we will round the RealSum
+
+```{r}
+all_data$realSum <- round(all_data$realSum, 2)
+```
+
 Below we check the summary of the data
 ```{r check summary of the data}
 View(summary(all_data))
