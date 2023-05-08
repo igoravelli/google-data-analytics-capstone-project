@@ -71,7 +71,7 @@ to_selec_cols <- c("realSum",
                     "norm_centerDist",
                     "norm_metroDist")
 
-selec_cols_df <- select(norm_df, to_selec_cols)
+selec_cols_df <- norm_df %>% select(all_of(to_selec_cols))
 # View(selec_cols_df)
 ```
 
