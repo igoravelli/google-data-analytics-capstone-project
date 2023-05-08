@@ -5,8 +5,7 @@ selected airbnb listings to choose which one is the best choice for our client
 
 ```{r load all packages and the csv file}
 library(dplyr)
-library(plyr)
-library(knitr)
+
 library(tidyr)
 
 setwd("/home/igorregly/google-data-analytics-capstone-project/")
