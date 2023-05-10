@@ -124,34 +124,26 @@ View(to_graphs_df)
 To visualize the clients' option we will create a map with the score information about each listing to help them out to choose the better option.
 
 ```{r install n load the packages to visualize the data}
-library(ggplot2)
-library(maps)
+library(leaflet)
 ```
 
 ```{r create the map}
-world_map <- map_data("world")
+# I will filter the df to test the map
+ams_df <- to_graphs_df %>% filter(city == 'amsterdam')
 
-europeanUnion <- c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", 
-                   "Czech Rep.", "Denmark", "Estonia", "Finland", "France", 
-                   "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", 
-                   "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", 
-                   "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", 
-                   "Sweden", "UK")
+colors <- colorRampPalette(c("red", "yellow", "green"))
 
-EU_map <- world_map %>% filter(region %in% europeanUnion)
+color_scale <- colorNumeric(colors,
+                            domain = ams_df$score)
 
-ggplot() +
-    geom_polygon(
-        data = EU_map,
-        aes(x = long, y = lat, group = group),
-        fill = "white",
-        color = "black"
-    ) +
-    geom_point(
-        data = to_graphs_df,
-        aes(x = lng, y = lat),
-        color = "red",
-        size = 3
-    ) +
-    theme_void()
+m <- leaflet() %>%
+    addTiles() %>%
+    addCircleMarkers(
+        data = ams_df,
+        lng = ~lng,
+        lat = ~lat,
+        color = ~color_scale(score),
+        popup = ~score
+    )
+m
 ```
