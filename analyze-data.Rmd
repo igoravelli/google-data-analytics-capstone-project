@@ -23,7 +23,13 @@ After interviewing our client we get these information about their priorities:
 Besides, they are 4 people and anyone doesn't drive. So, the distance to a means of public transport is an important point.
 4. distance to public transport
 
-First, we have to normalize all variables that will be used to build the score.
+First, we have to separate the weekends from weekdays, to not compare two variables that aren't correlated.
+```{r separate the weekdays and weekends}
+weekdays_rows <- all_data %>% filter(type == 'weekdays')
+weekends_rows <- all_data %>% filter(type == 'weekends')
+```
+
+After, we have to normalize all variables that will be used to build the score, in each dataframe.
 
 To do that we'll use the Min-Max Normalization method to transform all values on a value between 0 and 1
 ```{r normalize the variables}
@@ -36,26 +42,31 @@ min_max_normalization <- function(s) {
     return(serie)
 }
 
-# create normalized columns
-norm_df <- transform(all_data,
+# create normalized columns from each dataframe
+wends_norm_df <- transform(weekends_rows,
                     norm_realSum = min_max_normalization(realSum),
                     norm_cleanRating = min_max_normalization(cleanliness_rating),
                     norm_csat = min_max_normalization(guest_satisfaction_overall),
                     norm_centerDist = min_max_normalization(dist),
                     norm_metroDist = min_max_normalization(metro_dist))
 
-# covnert the booleans columns to numerics ones
+wdays_norm_df <- transform(weekdays_rows,
+                    norm_realSum = min_max_normalization(realSum),
+                    norm_cleanRating = min_max_normalization(cleanliness_rating),
+                    norm_csat = min_max_normalization(guest_satisfaction_overall),
+                    norm_centerDist = min_max_normalization(dist),
+                    norm_metroDist = min_max_normalization(metro_dist))
+
+# convert the booleans columns to numerics ones
 bool_cols <- c('room_shared', 'room_private', 'host_is_superhost')
 
-norm_df[bool_cols] <- apply(norm_df[bool_cols], 2, function(x) as.numeric(as.logical(x)))
-
-
-# View(norm_df)
+wends_norm_df[bool_cols] <- apply(wends_norm_df[bool_cols], 2, function(x) as.numeric(as.logical(x)))
+wdays_norm_df[bool_cols] <- apply(wdays_norm_df[bool_cols], 2, function(x) as.numeric(as.logical(x)))
 ```
 
 After created the norm columns, we'll select the ones that will be used to create the score
 ```{r selecting columns to use}
-to_selec_cols <- c("realSum",
+cols <- c("realSum",
                     "room_type",
                     "room_shared",
                     "bedrooms",
@@ -70,8 +81,8 @@ to_selec_cols <- c("realSum",
                     "norm_centerDist",
                     "norm_metroDist")
 
-selec_cols_df <- norm_df %>% select(all_of(to_selec_cols))
-# View(selec_cols_df)
+wdays_norm_df <- wdays_norm_df %>% select(all_of(cols))
+wends_norm_df <- wends_norm_df %>% select(all_of(cols))
 ```
 
 With all set, we can now create the score to help us to choose the better list to our client.
@@ -84,27 +95,31 @@ To do that, we will create a vector with weight values accordingly the clients p
 ```{r weighting the values}
 weight_values <- c(0.9, 0.7, 0.5)
 
-weighted_df <- selec_cols_df %>%
-    mutate(
+weighted_wdays_norm_df <- wdays_norm_df %>% mutate(
         weighted_realSum = norm_realSum * weight_values[2],
         weighted_centerDist = norm_centerDist * weight_values[2],
         weighted_metroDist = norm_metroDist * weight_values[2],
         weighted_cleanRating = norm_cleanRating * weight_values[3],
         weighted_csat = norm_csat * weight_values[3],
-        score = -(weighted_realSum) + weighted_cleanRating + weighted_csat + -(weighted_centerDist) + -(weighted_metroDist)
+        score = -weighted_realSum + weighted_cleanRating + weighted_csat -weighted_centerDist -weighted_metroDist
     )
 
-# View(weighted_df)
+weighted_wends_norm_df <- wends_norm_df %>% mutate(
+        weighted_realSum = norm_realSum * weight_values[2],
+        weighted_centerDist = norm_centerDist * weight_values[2],
+        weighted_metroDist = norm_metroDist * weight_values[2],
+        weighted_cleanRating = norm_cleanRating * weight_values[3],
+        weighted_csat = norm_csat * weight_values[3],
+        score = -weighted_realSum + weighted_cleanRating + weighted_csat -weighted_centerDist -weighted_metroDist
+    )
 ```
 
 Because the privacy is very important to our client, before to create the charts we'll filter out only the listings that are private rooms and, obviously, because they are 4,
 we'll also filter out only the listings that have 4 bedrooms.
 
-In the same chunk code we'll select the columns that will be used to create our map.
+In the same chunk code we'll select the columns that will be used to create our maps.
 
 ```{r filter the private listings and select columns}
-only_private_rooms <- weighted_df[weighted_df$room_shared == 0 & weighted_df$person_capacity >= 4, ]
-
 cols = c(
     'realSum',
     'room_type',
@@ -115,9 +130,19 @@ cols = c(
     'type'
 )
 
-to_graphs_df <- select(only_private_rooms, cols)
+wdays_to_graphs <- weighted_wdays_norm_df %>%
+        filter(
+            room_shared == 0 &
+            person_capacity >= 4
+        ) %>%
+        select(cols)
 
-View(to_graphs_df)
+wends_to_graphs <- weighted_wends_norm_df %>%
+        filter(
+            room_shared == 0 &
+            person_capacity >= 4
+        ) %>%
+        select(cols)
 ```
 
 # All this to visualize the data on a map
@@ -127,11 +152,19 @@ To visualize the clients' option we will create a map with the score information
 library(leaflet)
 ```
 
-```{r create the map}
-# I will filter the df to test the map
-ams_df <- to_graphs_df %>% filter(city == 'amsterdam')
+Before to create the map we'll select the best 20 options from each city accordingly to the created score. This is necessary 
+to make better to the user visualize the options in the map.
+```{r selecting the best 20 from each city}
+wdays_to_graphs <- wdays_to_graphs %>%
+    group_by(city) %>%
+    mutate(rank = dense_rank(desc(score))) %>%
+    filter(rank <= 20)
 
-colors <- colorRampPalette(c("red", "yellow", "green"))
+wends_to_graphs <- wends_to_graphs %>%
+    group_by(city) %>%
+    mutate(rank = dense_rank(desc(score))) %>%
+    filter(rank <= 20)
+```
 
 color_scale <- colorNumeric(colors,
                             domain = ams_df$score)
