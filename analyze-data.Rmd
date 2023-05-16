@@ -166,31 +166,34 @@ wends_to_graphs <- wends_to_graphs %>%
     filter(rank <= 20)
 ```
 
-```{r}
-print(unique(wdays_to_graphs$room_type))
-```
 
-
+So, finally we'll create the maps to plot all selected listings with its information
 ```{r create the map from weekdays listings}
 wdays_pal <- colorNumeric(
     palette = "Reds",
     domain = wdays_to_graphs$score
 )
 
-create_icon <- function(type) {
-        if (type == "Entire home/apt") {
-            icon <- leaflet::makeIcon(
-                                iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-green.png",
-                                iconSize = c(38, 95),
-                                iconAnchor = c(22, 94),
-                                popupAnchor = c(-3, -76)
+mytext <- paste(
+   "City: ", wdays_to_graphs$city, "<br/>",
+   "Price: ", wdays_to_graphs$realSum, "<br/>",
+   "Type: ", wdays_to_graphs$room_type) %>%
+  lapply(htmltools::HTML)
+
+wdays_map <- leaflet(wdays_to_graphs) %>%
+    addTiles() %>%
+    addCircleMarkers(
+        lng = ~lng,
+        lat = ~lat,
+        color = ~wdays_pal(score),
+        stroke = FALSE,
+        # clusterOptions = markerClusterOptions(),
+        fillOpacity = 0.9,
+        label = mytext
                             )
-        } else if (type == "Private room") {
-            icon <- leaflet::makeIcon(
-                                iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-orange.png",
-                                iconSize = c(38, 95),
-                                iconAnchor = c(22, 94),
-                                popupAnchor = c(-3, -76)
+wdays_map
+```
+
                             )
         } else {
             icon <- leaflet::makeIcon(
