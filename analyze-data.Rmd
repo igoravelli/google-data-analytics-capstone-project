@@ -190,33 +190,33 @@ wdays_map <- leaflet(wdays_to_graphs) %>%
         # clusterOptions = markerClusterOptions(),
         fillOpacity = 0.9,
         label = mytext
-                            )
+    )
 wdays_map
 ```
 
-                            )
-        } else {
-            icon <- leaflet::makeIcon(
-                                iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-red.png",
-                                iconSize = c(38, 95),
-                                iconAnchor = c(22, 94),
-                                popupAnchor = c(-3, -76)
-                            )
-        }
-        return(icon)
-    }
+```{r create the map from weekends listings}
+days_pal <- colorNumeric(
+    palette = "Reds",
+    domain = wends_to_graphs$score
+)
 
-wdays_map <- leaflet() %>%
+mytext <- paste(
+   "City: ", wends_to_graphs$city, "<br/>",
+   "Price: ", wends_to_graphs$realSum, "<br/>",
+   "Type: ", wends_to_graphs$room_type) %>%
+  lapply(htmltools::HTML)
+
+wdays_map <- leaflet(wends_to_graphs) %>%
     addTiles() %>%
     addCircleMarkers(
-        data = wdays_to_graphs,
         lng = ~lng,
         lat = ~lat,
         color = ~wdays_pal(score),
         stroke = FALSE,
         # clusterOptions = markerClusterOptions(),
         fillOpacity = 0.9,
-        label = ~realSum
+        label = mytext
     )
 wdays_map
+
 ```
